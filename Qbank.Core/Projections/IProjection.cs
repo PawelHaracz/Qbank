@@ -1,4 +1,8 @@
-﻿namespace Qbank.Core.Projections
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace Qbank.Core.Projections
 {
     public interface IProjection
     {

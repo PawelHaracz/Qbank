@@ -1,4 +1,9 @@
-﻿namespace Qbank.Core.Projections
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Threading.Tasks;
+
+namespace Qbank.Core.Projections
 {
     /// <summary>
     /// Base class for projections, helping in double-dispatch of the events.

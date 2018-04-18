@@ -1,4 +1,6 @@
-﻿namespace Qbank.Core.Projections
+﻿using System;
+
+namespace Qbank.Core.Projections
 {
     public class DispatchedEvent
     {
