@@ -1,8 +1,20 @@
-﻿namespace Qbank.Tests
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using NUnit.Framework;
+using NUnit.Framework.Interfaces;
+using NUnit.Framework.Internal;
+using ProtoBuf;
+using Qbank.Core;
+
+namespace Qbank.Test
 {
     /// <summary>
     ///     The base aggregate test class that enables BDD-like <see cref="Given" />,
-    ///     <see cref="Then(System.Action{TState})" />.
+    ///     <see cref="Then(Action)" />.
     /// </summary>
     /// <typeparam name="TState"></typeparam>
     public abstract class BaseAggregateTest<TState>

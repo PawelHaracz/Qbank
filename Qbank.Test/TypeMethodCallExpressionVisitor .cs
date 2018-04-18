@@ -1,6 +1,10 @@
-﻿namespace Qbank.Tests
+﻿using System;
+using System.Linq.Expressions;
+using System.Reflection;
+
+namespace Qbank.Test
 {
-    class TypeMethodCallExpressionVisitor : ExpressionVisitor
+    public class TypeMethodCallExpressionVisitor : ExpressionVisitor
     {
         readonly Type toFindCall;
         public MethodInfo Method;

@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
 using ProtoBuf;
+using Qbank.Core;
+using Qbank.Core.Projections;
 
-namespace Qbank.Tests
+namespace Qbank.Test
 {
     /// <summary>
     /// Base class for projection tests.

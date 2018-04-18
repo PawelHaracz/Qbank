@@ -1,7 +1,12 @@
-﻿namespace Qbank.Tests
+﻿using System;
+using System.CodeDom.Compiler;
+using System.IO;
+using NUnit.Framework;
+
+namespace Qbank.Test
 {
     /// <summary>
-    ///     The namespace setup that sets the <see cref="IndentedTextWriter" /> to enable nice printing of tests.
+    ///     The namespace setup that sets the <see cref="System.CodeDom.Compiler.IndentedTextWriter" /> to enable nice printing of tests.
     /// </summary>
     [SetUpFixture]
     public class __

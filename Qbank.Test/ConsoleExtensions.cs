@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Qbank.Tests
+namespace Qbank.Test
 {
     /// <summary>
     /// Enables writing indented text to <see cref="Console.Out"/>
