@@ -2,6 +2,7 @@
 using System.CodeDom.Compiler;
 using System.IO;
 using NUnit.Framework;
+using Qbank.Core;
 
 namespace Qbank.Test
 {
@@ -17,6 +18,7 @@ namespace Qbank.Test
         [OneTimeSetUp]
         public void SetUp()
         {
+            EventSerializer.Register(typeof(__).Assembly);
             _writer = Console.Out;
             Indented = new IndentedTextWriter(_writer);
             Console.SetOut(Indented);
