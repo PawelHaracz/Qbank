@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Qbank.Core\Qbank.Core.csproj" />
+    <ProjectReference Include="..\Qbank.Questions\Qbank.Questions.csproj" />
   </ItemGroup>
 
 </Project>
