@@ -16,7 +16,7 @@ namespace Qbank.Core.Projections
     {
         readonly EventMapping mapping;
         public abstract Guid Id { get; }
-
+        
         protected ProjectionBase()
         {
             mapping = new EventMapping();
