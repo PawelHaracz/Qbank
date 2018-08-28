@@ -1,4 +1,5 @@
 ﻿using System.Runtime.Serialization;
+using Qbank.Core.Event;
 
 namespace Qbank.Core.Orchestrations.Impl
 {

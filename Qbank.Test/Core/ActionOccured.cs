@@ -1,5 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using Qbank.Core;
+using Qbank.Core.Event;
 
 namespace Qbank.Test.Core
 {

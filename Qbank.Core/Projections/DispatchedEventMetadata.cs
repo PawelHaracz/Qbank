@@ -1,4 +1,5 @@
 ﻿using System;
+using Qbank.Core.Event;
 
 namespace Qbank.Core.Projections
 {

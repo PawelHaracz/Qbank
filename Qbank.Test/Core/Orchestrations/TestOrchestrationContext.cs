@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Qbank.Core;
+using Qbank.Core.Event;
 using Qbank.Core.Orchestrations.Impl;
 
 namespace Qbank.Test.Core.Orchestrations

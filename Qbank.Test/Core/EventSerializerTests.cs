@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Qbank.Core;
+using Qbank.Core.Event;
 
 namespace Qbank.Test.Core
 {

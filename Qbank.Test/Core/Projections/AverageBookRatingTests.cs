@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Qbank.Core;
+using Qbank.Core.Event;
 using Qbank.Core.Projections;
 
 namespace Qbank.Test.Core.Projections

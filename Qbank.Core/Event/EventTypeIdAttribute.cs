@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Qbank.Core
+namespace Qbank.Core.Event
 {
     /// <summary>
     ///     Identifies event type with a Guid. Guids are much easier to preserve than a non-colliding names across modules.

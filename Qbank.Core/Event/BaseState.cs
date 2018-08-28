@@ -1,4 +1,4 @@
-﻿namespace Qbank.Core
+﻿namespace Qbank.Core.Event
 {
     /// <summary>
     ///     Just a base class for all the states.

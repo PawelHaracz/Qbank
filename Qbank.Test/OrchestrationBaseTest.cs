@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Qbank.Core;
+using Qbank.Core.Event;
 using Qbank.Core.Orchestrations;
 using Qbank.Core.Orchestrations.Impl;
 using Qbank.Test.Core.Orchestrations;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Qbank.Core.Event;
 
 namespace Qbank.Core.Orchestrations.Impl
 {

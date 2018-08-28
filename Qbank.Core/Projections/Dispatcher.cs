@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using EventStore.ClientAPI;
+using Qbank.Core.Event;
 
 namespace Qbank.Core.Projections
 {

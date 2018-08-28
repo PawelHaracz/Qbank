@@ -9,6 +9,7 @@ using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
 using ProtoBuf;
 using Qbank.Core;
+using Qbank.Core.Event;
 
 namespace Qbank.Test
 {

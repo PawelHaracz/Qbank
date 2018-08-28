@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Qbank.Core\Qbank.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="EventStore.ClientAPI.NetCore">
+      <HintPath>..\..\..\..\Users\PawelHaracz\.nuget\packages\eventstore.clientapi.netcore\4.1.0.23\lib\netstandard2.0\EventStore.ClientAPI.NetCore.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

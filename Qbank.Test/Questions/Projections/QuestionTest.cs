@@ -5,7 +5,7 @@ using Qbank.Questions.Projections;
 
 namespace Qbank.Test.Questions.Projections
 {
-    public class QuestionTest : ProjectionBaseTest<AllQuestionTeaserByKind, QuestionTeasersWith20Characters>
+    public class QuestionTest : ProjectionBaseTest<AllQuestionByKind, QuestionTeasersWith20Characters>
     {
         [Test]
         public void When_create_many_questions_with_diffrent_kinds_should_return_properly_questions_teaser()

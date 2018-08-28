@@ -1,4 +1,6 @@
-﻿namespace Qbank.Core
+﻿using Qbank.Core.Event;
+
+namespace Qbank.Core
 {
     public class StateApplier
     {

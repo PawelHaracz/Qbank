@@ -7,7 +7,7 @@ using ProtoBuf;
 using ProtoBuf.Meta;
 using Qbank.Core.Serialization;
 
-namespace Qbank.Core
+namespace Qbank.Core.Event
 {
     public static class EventSerializer
     {

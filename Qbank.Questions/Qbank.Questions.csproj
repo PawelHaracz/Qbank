@@ -4,6 +4,12 @@
     <ProjectReference Include="..\Qbank.Core\Qbank.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Autofac">
+      <HintPath>..\..\..\..\Users\PawelHaracz\.nuget\packages\autofac\4.0.0\lib\netstandard1.1\Autofac.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>

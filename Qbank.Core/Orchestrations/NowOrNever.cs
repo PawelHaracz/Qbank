@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 
-namespace Qbank.Core
+namespace Qbank.Core.Orchestrations
 {
     public sealed class NowOrNever : ICriticalNotifyCompletion
     {

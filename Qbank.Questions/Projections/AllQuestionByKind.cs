@@ -5,7 +5,7 @@ using Qbank.Core.Projections;
 
 namespace Qbank.Questions.Projections
 {
-    public class AllQuestionTeaserByKind : ProjectionBase<AllQuestionTeaserByKind,  QuestionTeasersWith20Characters>
+    public class AllQuestionByKind : ProjectionBase<AllQuestionByKind,  QuestionTeasersWith20Characters>
     {
 
         public override Guid Id => new Guid("B11E8157-BF5A-4CE3-850F-727CBD2AA450");
