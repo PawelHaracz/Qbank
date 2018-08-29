@@ -8,7 +8,7 @@ namespace Qbank.Questions.Events.Tags
     {
         public static IEnumerable<IEvent> Create(TagState state, Guid tagId, string tagName)
         {
-            if (state.Has(tagName) == false)
+            if (state.Has(tagName) == false && state.Has(tagId) == false)
             {
                 yield return new CreatedTag(tagId, tagName);
             }

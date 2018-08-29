@@ -1,7 +1,5 @@
 ﻿using System;
 using NUnit.Framework;
-using Qbank.Questions;
-using Qbank.Questions.Events;
 using Qbank.Questions.Events.Questions;
 
 namespace Qbank.Test.Questions

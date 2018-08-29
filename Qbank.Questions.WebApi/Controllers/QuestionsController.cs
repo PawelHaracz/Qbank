@@ -25,7 +25,7 @@ namespace Qbank.Questions.WebApi.Controllers
         [ProducesResponseType(200, Type = typeof(IDictionary<Guid, string>))]
         public async Task<ActionResult<IEnumerable<string>>> Get()
         {
-            var query = new GetAllUserQuestions()
+            var query = new GetAllUserQuestionsQuery()
             {
                 User = "PawelHaracz"
             };
@@ -40,27 +40,33 @@ namespace Qbank.Questions.WebApi.Controllers
             return "command";
         }
 
-        // POST api/questions
-        [HttpPost]
+        // POST api/questions/{tagName}
+        [HttpPost("{tagName}")]
         [ProducesResponseType(200, Type = typeof(Guid))]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> Post([FromBody]string question)
+        public async Task<IActionResult> Post([FromBody]string question, [FromRoute]string tagName)
         {
             if (string.IsNullOrWhiteSpace(question))
             {
-                return BadRequest($"{nameof(question)} is null or empty");
+                return BadRequest(new ArgumentNullException($"{nameof(question)}"));
             }
+
+            if (string.IsNullOrWhiteSpace(tagName))
+            {
+                return BadRequest(new ArgumentNullException($"{nameof(tagName)}"));
+            }
+
             var command = new CreateQuestion()
             {
                 Question = question,
                 CreatedOn = "PawelHaracz",
-                Tag = "Test"
+                Tag = tagName
             };
-           var id = await _commandDispatcher.DispatchAsync(command).ConfigureAwait(false);
+            var id = await _commandDispatcher.DispatchAsync(command).ConfigureAwait(false);
             return Ok(id);
         }
 
-          
+
         // DELETE api/values/5
         [HttpDelete("{id}")]
         public void Delete(int id)

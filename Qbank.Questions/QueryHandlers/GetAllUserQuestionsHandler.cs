@@ -7,12 +7,12 @@ using Qbank.Core;
 using Qbank.Core.Event;
 using Qbank.Core.Queries;
 using Qbank.Questions.Projections;
-using Qbank.Questions.Projections.Models;
+using Qbank.Questions.Projections.States;
 using Qbank.Questions.Quries;
 
 namespace Qbank.Questions.QueryHandlers
 {
-    public class GetAllUserQuestionsHandler : IQueryHandler<GetAllUserQuestions, IDictionary<Guid, string>>
+    public class GetAllUserQuestionsHandler : IQueryHandler<GetAllUserQuestionsQuery, IDictionary<Guid, string>>
     {
         private readonly IEventStoreConnectionProvider _connectionProvider;
 
@@ -21,10 +21,10 @@ namespace Qbank.Questions.QueryHandlers
             _connectionProvider = connectionProvider;
         }
 
-        public async Task<IDictionary<Guid,string>> HandleAsync(GetAllUserQuestions query)
+        public async Task<IDictionary<Guid,string>> HandleAsync(GetAllUserQuestionsQuery query)
         {
             var streamId = $"{StreamPrefix.Question}_{query.User}";
-            var aggregation = await _connectionProvider.Dispatch<AllQuestionByUser, QuestionTeasersWith100Characters>(streamId).ConfigureAwait(false);
+            var aggregation = await _connectionProvider.Dispatch<AllQuestionByUserProjection, QuestionTeasersWith100CharactersState>(streamId).ConfigureAwait(false);
             if (!aggregation.Any())
             {
                 return new Dictionary<Guid, string>();

@@ -4,11 +4,11 @@ using Qbank.Questions;
 using Qbank.Questions.Events;
 using Qbank.Questions.Events.Questions;
 using Qbank.Questions.Projections;
-using Qbank.Questions.Projections.Models;
+using Qbank.Questions.Projections.States;
 
 namespace Qbank.Test.Questions.Projections
 {
-    public class QuestionTest : ProjectionBaseTest<AllQuestionByUser, QuestionTeasersWith100Characters>
+    public class QuestionTest : ProjectionBaseTest<AllQuestionByUserProjection, QuestionTeasersWith100CharactersState>
     {
         [Test]
         public void When_create_many_questions_with_diffrent_time_and_user_should_return_properly_questions_teaser()
@@ -23,7 +23,7 @@ namespace Qbank.Test.Questions.Projections
             Given($"Question_PawelHaracz", new QuestionCreated(g3, "but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages"));
             Given($"Question_JanKowalski", new QuestionCreated(g4, "and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."));
 
-            Then("PawelHaracz", new QuestionTeasersWith100Characters()
+            Then("PawelHaracz", new QuestionTeasersWith100CharactersState()
             {
                 Questions =
                {
@@ -32,7 +32,7 @@ namespace Qbank.Test.Questions.Projections
                    { g3,  "but also the leap into electronic typesetting, remaining essentially unchanged.".Substring(0,20)}
                }
             });
-            Then("JanKowalski", new QuestionTeasersWith100Characters()
+            Then("JanKowalski", new QuestionTeasersWith100CharactersState()
             {
                 Questions =
                 {

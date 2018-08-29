@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Qbank.Core;
 using Qbank.Core.Projections;
-using Qbank.Questions.Events;
 using Qbank.Questions.Events.Questions;
-using Qbank.Questions.Projections.Models;
+using Qbank.Questions.Projections.States;
 
 namespace Qbank.Questions.Projections
 {
-    public class AllQuestionByUser : ProjectionBase<AllQuestionByUser,  QuestionTeasersWith100Characters>
+    public class AllQuestionByUserProjection : ProjectionBase<AllQuestionByUserProjection,  QuestionTeasersWith100CharactersState>
     {
 
         public override Guid Id => new Guid("B11E8157-BF5A-4CE3-850F-727CBD2AA450");
@@ -19,7 +17,7 @@ namespace Qbank.Questions.Projections
         }
 
         //Later change QuestionCreated to IEvent to handle many events :)
-        static Task Apply(Metadata meta, QuestionCreated questionCreated, QuestionTeasersWith100Characters questionTeasersWith100Characters)
+        static Task Apply(Metadata meta, QuestionCreated questionCreated, QuestionTeasersWith100CharactersState questionTeasersWith100Characters)
         {
             questionTeasersWith100Characters.Apply(questionCreated);
             return Task.CompletedTask;
