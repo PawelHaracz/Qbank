@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Qbank.Core.Event;
+using Qbank.Questions.Events.Questions;
 
-namespace Qbank.Questions.Events
+namespace Qbank.Questions.Events.Questions
 {
     public class QuestionActions
     {

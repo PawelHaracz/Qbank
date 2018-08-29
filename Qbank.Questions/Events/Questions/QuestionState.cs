@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Qbank.Core.Event;
 
-namespace Qbank.Questions.Events
+namespace Qbank.Questions.Events.Questions
 {
     public class QuestionState : BaseState
     {

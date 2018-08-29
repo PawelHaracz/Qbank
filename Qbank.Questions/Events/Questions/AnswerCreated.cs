@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using Qbank.Core.Event;
 
-namespace Qbank.Questions.Events
+namespace Qbank.Questions.Events.Questions
 {
     [DataContract]
     [EventTypeId(TypeId)]

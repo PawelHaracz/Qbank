@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using Qbank.Questions.Events;
+using Qbank.Questions.Events.Questions;
 
-namespace Qbank.Questions.Projections
+namespace Qbank.Questions.Projections.Models
 {
     [DataContract]
     public class QuestionTeasersWith20Characters

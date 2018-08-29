@@ -2,7 +2,9 @@
 using NUnit.Framework;
 using Qbank.Questions;
 using Qbank.Questions.Events;
+using Qbank.Questions.Events.Questions;
 using Qbank.Questions.Projections;
+using Qbank.Questions.Projections.Models;
 
 namespace Qbank.Test.Questions.Projections
 {

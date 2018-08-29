@@ -4,6 +4,8 @@ using Qbank.Core.Command;
 using Qbank.Core.Event;
 using Qbank.Questions.Commands;
 using Qbank.Questions.Events;
+using Qbank.Questions.Events.Questions;
+using Qbank.Questions.Events.Tags;
 
 namespace Qbank.Questions.CommandHanlders
 {
@@ -17,11 +19,21 @@ namespace Qbank.Questions.CommandHanlders
 
         public async Task<Guid> HandleAsync(CreateQuestion command)
         {
-            var id = Guid.NewGuid();
-            var streamId = $"Question_{DateTime.Now:yy-MM-dd:HH-mm-ss}_{command.CreatedOn}";
-            await _eventStoreConnectionProvider.Execute<QuestionState>(streamId, s => QuestionActions.Create(s,id, command.Question)).ConfigureAwait(false);
+            var questionId = Guid.NewGuid();
+            var tagId = Guid.NewGuid();
 
-            return id;
+            var questionStreamId = $"Question_{DateTime.Now:yy-MM-dd:HH-mm-ss}_{command.CreatedOn}";
+            var tagStreamId = $"Tag";
+            var tagToQuesitonStreamId = $"Tag_{tagId}";
+            //wrap it in transaction
+            var questionTask = _eventStoreConnectionProvider.Execute<QuestionState>(questionStreamId, s => QuestionActions.Create(s, questionId, command.Question));
+            var tagGlobalTask = _eventStoreConnectionProvider.Execute<TagState>(tagStreamId, s => TagActions.Create(s, tagId, command.Tag));
+            var tagTask = _eventStoreConnectionProvider.Execute<TagState>(tagToQuesitonStreamId, s => TagActions.Create(s, tagId, command.Tag));
+            var assosiateQuestionToTagTask = _eventStoreConnectionProvider.Execute<TagState>(tagToQuesitonStreamId, s => TagActions.Assosiate(s, tagId, questionId));
+
+            await Task.WhenAll(questionTask, tagGlobalTask, tagTask, assosiateQuestionToTagTask).ConfigureAwait(false);
+
+            return questionId;
         }
     }
 }

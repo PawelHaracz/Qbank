@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Qbank.Core;
 using Qbank.Core.Projections;
 using Qbank.Questions.Events;
+using Qbank.Questions.Events.Questions;
+using Qbank.Questions.Projections.Models;
 
 namespace Qbank.Questions.Projections
 {
