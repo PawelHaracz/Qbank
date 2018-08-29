@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
 
-namespace Qbank.Core.Event
+namespace Qbank.Core
 {
     public class Snapshot<TState>
     {

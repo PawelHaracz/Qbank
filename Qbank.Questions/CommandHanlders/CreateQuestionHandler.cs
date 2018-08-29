@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Qbank.Core;
 using Qbank.Core.Command;
-using Qbank.Core.Event;
 using Qbank.Questions.Commands;
-using Qbank.Questions.Events;
 using Qbank.Questions.Events.Questions;
 using Qbank.Questions.Events.Tags;
 
@@ -22,9 +21,9 @@ namespace Qbank.Questions.CommandHanlders
             var questionId = Guid.NewGuid();
             var tagId = Guid.NewGuid();
 
-            var questionStreamId = $"Question_{DateTime.Now:yy-MM-dd:HH-mm-ss}_{command.CreatedOn}";
-            var tagStreamId = $"Tag";
-            var tagToQuesitonStreamId = $"Tag_{tagId}";
+            var questionStreamId = $"{StreamPrefix.Question}_{command.CreatedOn}";
+            var tagStreamId = $"{StreamPrefix.Tag}";
+            var tagToQuesitonStreamId = $"{StreamPrefix.Tag}_{tagId}";
             //wrap it in transaction
             var questionTask = _eventStoreConnectionProvider.Execute<QuestionState>(questionStreamId, s => QuestionActions.Create(s, questionId, command.Question));
             var tagGlobalTask = _eventStoreConnectionProvider.Execute<TagState>(tagStreamId, s => TagActions.Create(s, tagId, command.Tag));

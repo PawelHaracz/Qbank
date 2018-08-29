@@ -9,8 +9,10 @@ using EventStore.ClientAPI.Exceptions;
 using EventStore.ClientAPI.SystemData;
 using Qbank.Core.Configuration;
 using Microsoft.Extensions.Options;
+using Qbank.Core.Projections;
+using Qbank.Core.Event;
 
-namespace Qbank.Core.Event
+namespace Qbank.Core
 {
     public class EventStoreConnectionProvider : IEventStoreConnectionProvider, IDisposable
     {
@@ -56,6 +58,44 @@ namespace Qbank.Core.Event
             {
                 Snapshot<TState>.AddSnapshot(streamId, new Snapshot<TState>(state, actualVersion));
             }
+        }
+
+        ///todo implement snapshot
+        public async Task<Dictionary<string, TState>> Dispatch<TProjection, TState>(string streamId) where TProjection : ProjectionBase<TProjection, TState>, new() where TState : new()
+        {
+            var eventsSlice = await _connection.ReadStreamEventsForwardAsync(streamId, 0, 100, false).ConfigureAwait(false);
+            var events = eventsSlice.Events.Select(e => EventSerializer.Deserialize(e.Event.Data, new Guid(e.Event.EventType)));
+
+            var result = new Dictionary<string, TState>();
+            var p = new TProjection();
+            foreach (var @event in events)
+            {
+                var type = @event.GetType();
+                var attr = type.GetCustomAttribute<EventTypeIdAttribute>();
+                if (attr == null)
+                    throw new ArgumentException($"Mark e '{type.FullName}' with {nameof(EventTypeIdAttribute)}");
+                var id = attr.Id;
+
+                var dispatchedEvent = new DispatchedEvent
+                {
+                    Event = @event,
+                    Metadata = new Metadata
+                    {
+                        EventId = Guid.NewGuid(),
+                        EventTypeId = id,
+                        StreamId = streamId
+                    }
+                };
+
+                var partition = p.GetPartitioningKey(dispatchedEvent);
+                if (result.TryGetValue(partition, out var state) == false)
+                {
+                    result[partition] = state = new TState();
+                }
+
+                await p.Dispatch(dispatchedEvent, state).ConfigureAwait(false);
+            }
+            return result;
         }
 
         public void Dispose()

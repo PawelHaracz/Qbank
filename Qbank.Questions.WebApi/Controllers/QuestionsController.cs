@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Qbank.Core.Command;
+using Qbank.Core.Queries;
 using Qbank.Questions.Commands;
+using Qbank.Questions.Quries;
 
 namespace Qbank.Questions.WebApi.Controllers
 {
@@ -12,22 +13,29 @@ namespace Qbank.Questions.WebApi.Controllers
     [ApiController]
     public class QuestionsController : ControllerBase
     {
-        private readonly ICommandDispatcher _dispatcher;
-
-        public QuestionsController(ICommandDispatcher dispatcher)
+        private readonly ICommandDispatcher _commandDispatcher;
+        private readonly IQueryDispatcher _queryDispatcher;
+        public QuestionsController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher)
         {
-            _dispatcher = dispatcher;
+            _commandDispatcher = commandDispatcher;
+            _queryDispatcher = queryDispatcher;
         }
         // GET api/questions
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        [ProducesResponseType(200, Type = typeof(IDictionary<Guid, string>))]
+        public async Task<ActionResult<IEnumerable<string>>> Get()
         {
-            return new string[] { "value1", "value2" };
+            var query = new GetAllUserQuestions()
+            {
+                User = "PawelHaracz"
+            };
+            var result = await _queryDispatcher.DispatchAsync(query).ConfigureAwait(false);
+            return Ok(result);
         }
 
         // GET api/questions/5
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public ActionResult<string> Get(Guid id)
         {
             return "command";
         }
@@ -48,7 +56,7 @@ namespace Qbank.Questions.WebApi.Controllers
                 CreatedOn = "PawelHaracz",
                 Tag = "Test"
             };
-           var id = await _dispatcher.DispatchAsync(command).ConfigureAwait(false);
+           var id = await _commandDispatcher.DispatchAsync(command).ConfigureAwait(false);
             return Ok(id);
         }
 

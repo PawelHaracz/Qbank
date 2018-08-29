@@ -5,7 +5,7 @@ using Autofac;
 
 namespace Qbank.Core.Event
 {
-    public class EventStormModule : Module
+    public class EventStoreModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
