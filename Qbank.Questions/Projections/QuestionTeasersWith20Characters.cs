@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Qbank.Questions.Events;
 
 namespace Qbank.Questions.Projections
 {

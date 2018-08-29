@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using Qbank.Core;
 using Qbank.Core.Event;
 
-namespace Qbank.Questions
+namespace Qbank.Questions.Events
 {
     public class QuestionState : BaseState
     {
