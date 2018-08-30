@@ -15,15 +15,14 @@ using Qbank.Core.Event;
 namespace Qbank.Core
 {
     public class EventStoreConnectionProvider : IEventStoreConnectionProvider, IDisposable
-    {
-        private readonly EventStoreConfiguration _configuration;
-
-        private readonly IEventStoreConnection _connection;
+    {        
+        private readonly EventStoreConfiguration _configuration;    
+        private  IEventStoreConnection _connection;
 
         public EventStoreConnectionProvider(IOptions<EventStoreConfiguration> configuration)
         {
             _configuration = configuration.Value;
-        
+
             var settings = ConnectionSettings.Create()
                 .SetDefaultUserCredentials(new UserCredentials(_configuration.UserName, _configuration.UserPassword))
                 .SetHeartbeatTimeout(new TimeSpan(500))
@@ -54,63 +53,98 @@ namespace Qbank.Core
 
             var actualVersion = await Execute(streamId, version, state, execute).ConfigureAwait(false);
 
-            if (actualVersion > 1000)
+            if (actualVersion > version && actualVersion > _configuration.SnapchotLimit)
             {
                 Snapshot<TState>.AddSnapshot(streamId, new Snapshot<TState>(state, actualVersion));
             }
         }
 
-        ///todo implement snapshot
         public async Task<Dictionary<string, TState>> Dispatch<TProjection, TState>(string streamId) where TProjection : ProjectionBase<TProjection, TState>, new() where TState : new()
         {
-            var eventsSlice = await _connection.ReadStreamEventsForwardAsync(streamId, 0, 100, false).ConfigureAwait(false);
-            var events = eventsSlice.Events.Select(e => EventSerializer.Deserialize(e.Event.Data, new Guid(e.Event.EventType)));
-
-            var result = new Dictionary<string, TState>();
-            var p = new TProjection();
-            foreach (var @event in events)
+            Dictionary<string, TState> result;
+            int version;
+            if (SnapshotProjection<TState>.TryGetSnapshot(streamId, out var snapshot))
             {
-                var type = @event.GetType();
-                var attr = type.GetCustomAttribute<EventTypeIdAttribute>();
-                if (attr == null)
-                    throw new ArgumentException($"Mark e '{type.FullName}' with {nameof(EventTypeIdAttribute)}");
-                var id = attr.Id;
+                result = snapshot.State;
+                version = snapshot.Version;
+            }
+            else
+            {
+                result = new Dictionary<string, TState>();
+                version = 0;
+            }
 
-                var dispatchedEvent = new DispatchedEvent
-                {
-                    Event = @event,
-                    Metadata = new Metadata
-                    {
-                        EventId = Guid.NewGuid(),
-                        EventTypeId = id,
-                        StreamId = streamId
-                    }
-                };
+            var actualVersion = await Dispatch<TProjection, TState>(streamId, version, result).ConfigureAwait(false);
 
-                var partition = p.GetPartitioningKey(dispatchedEvent);
-                if (result.TryGetValue(partition, out var state) == false)
-                {
-                    result[partition] = state = new TState();
-                }
-
-                await p.Dispatch(dispatchedEvent, state).ConfigureAwait(false);
+            if (actualVersion > version && actualVersion > _configuration.SnapchotLimit)
+            {
+                SnapshotProjection<TState>.AddSnapshot(streamId, new SnapshotProjection<Dictionary<string, TState>>(result, actualVersion));
             }
             return result;
         }
 
         public void Dispose()
         {
+            _connection?.Close();
             _connection?.Dispose();
+            _connection = null;
+        }
+
+        private async Task<int> Dispatch<TProjection, TState>(string streamId, int version, Dictionary<string, TState> result) where TProjection : ProjectionBase<TProjection, TState>, new() where TState : new()
+        {
+            StreamEventsSlice eventsSlice;
+            var p = new TProjection();
+
+            do
+            {
+                eventsSlice = await _connection.ReadStreamEventsForwardAsync(streamId, version, _configuration.SnapchotLimit, false).ConfigureAwait(false);
+                var events = eventsSlice.Events.Select(e => EventSerializer.Deserialize(e.Event.Data, new Guid(e.Event.EventType)));
+
+                foreach (var @event in events)
+                {
+                    var type = @event.GetType();
+                    var attr = type.GetCustomAttribute<EventTypeIdAttribute>();
+                    if (attr == null)
+                        throw new ArgumentException($"Mark e '{type.FullName}' with {nameof(EventTypeIdAttribute)}");
+                    var id = attr.Id;
+
+                    var dispatchedEvent = new DispatchedEvent
+                    {
+                        Event = @event,
+                        Metadata = new Metadata
+                        {
+                            EventId = Guid.NewGuid(),
+                            EventTypeId = id,
+                            StreamId = streamId
+                        }
+                    };
+
+                    var partition = p.GetPartitioningKey(dispatchedEvent);
+                    if (result.TryGetValue(partition,out var  state) == false)
+                    {
+                        result[partition] = state = new TState();
+                    }
+
+                    await p.Dispatch(dispatchedEvent, state).ConfigureAwait(false);
+                    version++;
+                }
+                
+
+            } while (!eventsSlice.IsEndOfStream);
+
+            return version;
         }
 
         private async Task<int> Execute<TState>(string streamId, int version, TState state,
             Func<TState, IEnumerable<IEvent>> execute)
             where TState : BaseState, new()
         {
-            StreamEventsSlice eventsSlice;        
+
+            StreamEventsSlice eventsSlice;
             do
             {
-                eventsSlice = await _connection.ReadStreamEventsForwardAsync(streamId, version, 1000, false).ConfigureAwait(false);
+                
+                eventsSlice = await _connection.ReadStreamEventsForwardAsync(streamId, version, _configuration.SnapchotLimit, false).ConfigureAwait(false);
 
                 foreach (var e in eventsSlice.Events)
                 {
@@ -125,7 +159,7 @@ namespace Qbank.Core
             var newEventsData = newEvents.Select(e =>
             {
                 var eventId = Guid.NewGuid();
-                var eventTypeId = CustomAttributeExtensions.GetCustomAttribute<EventTypeIdAttribute>((MemberInfo) e.GetType()).Id.ToString();
+                var eventTypeId = e.GetType().GetCustomAttribute<EventTypeIdAttribute>().Id.ToString();
                 var data = EventSerializer.Serialize(e);
                 return new EventData(eventId, eventTypeId, false, data, new byte[0]);
             }).ToArray();

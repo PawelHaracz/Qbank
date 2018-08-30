@@ -6,5 +6,6 @@
         public string UserPassword { get; set; }
         public string Ip { get; set; }
         public int Port { get; set; }
+        public int SnapchotLimit { get; set; }
     }
 }

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Qbank.Core.Command;
 using Qbank.Core.Queries;
-using Qbank.Questions.QueryHandlers;
+using Qbank.Questions.Commands;
 using Qbank.Questions.Quries;
 
 namespace Qbank.Questions.WebApi.Controllers
@@ -15,10 +14,12 @@ namespace Qbank.Questions.WebApi.Controllers
     public class TagController : ControllerBase
     {
         private readonly IQueryDispatcher _queryDispatcher;
+        private readonly ICommandDispatcher _commandDispatcher;
 
-        public TagController(IQueryDispatcher queryDispatcher)
+        public TagController(IQueryDispatcher queryDispatcher, ICommandDispatcher  commandDispatcher)
         {
             _queryDispatcher = queryDispatcher;
+            _commandDispatcher = commandDispatcher;
         }
 
         [HttpGet]
@@ -27,6 +28,18 @@ namespace Qbank.Questions.WebApi.Controllers
         {
             var query = new GetAllTagsQuery();
             var result = await _queryDispatcher.DispatchAsync(query).ConfigureAwait(false);
+            return Ok(result);
+        }
+
+        [HttpPost("{name}")]
+        [ProducesResponseType(200, Type = typeof(Guid))]
+        public async Task<ActionResult<Guid>> Post([FromRoute]string name)
+        {
+            var command = new CreateTag()
+            {
+                TagName = name
+            };
+            var result = await _commandDispatcher.DispatchAsync(command).ConfigureAwait(false);
             return Ok(result);
         }
     }
