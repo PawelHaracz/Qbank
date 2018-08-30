@@ -10,7 +10,7 @@ namespace Qbank.Questions.Events.Tags
         private readonly HashSet<Guid> _tagIdsSet = new HashSet<Guid>();
         private readonly HashSet<(Guid TagId, Guid QuestionId)> _tagQuestionSet =new HashSet<(Guid TagId, Guid QuestionId)>(); 
 
-        public void Apply(CreatedTag @event)
+        public void Apply(TagCreated @event)
         {
             if (Has(@event.TagName) == false && Has(@event.TagId) == false)
             {

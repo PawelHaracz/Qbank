@@ -52,21 +52,21 @@ namespace Qbank.Test.Questions
             var answer = "this is the test answer";
 
             Given(new QuestionCreated(qustionId, question));
-            When(s => QuestionActions.Create(s, qustionId,answerId,answer,false));
-            Then(new AnswerCreated(answerId,qustionId,answer,false));
+            When(s => QuestionActions.Create(s, qustionId, answerId, answer, false));
+            Then(new AnswerCreated(answerId, qustionId, answer, false));
         }
 
         [Test]
         public void Not_created_question_want_to_add_answer_should_do_nothing()
         {
-            var qustionId = Guid.NewGuid();          
+            var qustionId = Guid.NewGuid();
             var answerId = Guid.NewGuid();
             var answer = "this is the test answer";
 
             Given();
             When(s => QuestionActions.Create(s, qustionId, answerId, answer, false));
             Then();
-        }
+        }  
 
         [Test]
         public void Given_Two_Question_connect_one_answer_to_both_should_emmited_events()

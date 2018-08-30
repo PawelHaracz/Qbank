@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Qbank.Core.Command;
 using Qbank.Core.Queries;
 using Qbank.Questions.Commands;
 using Qbank.Questions.Quries;
+using Qbank.Questions.WebApi.Models;
 
 namespace Qbank.Questions.WebApi.Controllers
 {
@@ -44,11 +46,16 @@ namespace Qbank.Questions.WebApi.Controllers
         [HttpPost("{tagName}")]
         [ProducesResponseType(200, Type = typeof(Guid))]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> Post([FromBody]string question, [FromRoute]string tagName)
+        public async Task<IActionResult> Post([FromBody]QustionWithAnserwsDto question, [FromRoute]string tagName)
         {
-            if (string.IsNullOrWhiteSpace(question))
+
+            if (question == null)
             {
                 return BadRequest(new ArgumentNullException($"{nameof(question)}"));
+            }
+            if (string.IsNullOrWhiteSpace(question.Question))
+            {
+                return BadRequest(new ArgumentNullException($"{nameof(question.Question)}"));
             }
 
             if (string.IsNullOrWhiteSpace(tagName))
@@ -56,21 +63,38 @@ namespace Qbank.Questions.WebApi.Controllers
                 return BadRequest(new ArgumentNullException($"{nameof(tagName)}"));
             }
 
+            var isAnyAnswer = question.Answers != null && question.Answers.Any();
+            if (isAnyAnswer && question.Answers.Any(a => a.IsCorrect) == false)
+            {
+                return BadRequest(new ArgumentException("Any answer isn't correct", $"{nameof(question.Answers)}"));
+            }
+
             var command = new CreateQuestion()
             {
-                Question = question,
+                Question = question.Question,
                 CreatedOn = "PawelHaracz",
                 Tag = tagName
             };
-            var id = await _commandDispatcher.DispatchAsync(command).ConfigureAwait(false);
-            return Ok(id);
-        }
+
+            var questionId = await _commandDispatcher.DispatchAsync(command).ConfigureAwait(false);
 
 
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            //implement service bus for that
+            if (isAnyAnswer)
+            {
+                var aneswerCommands = question.Answers.Select(a => new CreateAnswer()
+                {
+                    QuestionId = questionId,
+                    Answer = a.Answer,
+                    IsCorrect = a.IsCorrect,
+                    CreatedOn = command.CreatedOn
+                });
+                var answerTasks = aneswerCommands.Select(answer => _commandDispatcher.DispatchAsync(answer)).Cast<Task>().ToList();
+
+                await Task.WhenAll(answerTasks).ConfigureAwait(false);
+            }
+
+            return Ok(questionId);
         }
     }
 }

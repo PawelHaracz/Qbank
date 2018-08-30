@@ -10,7 +10,7 @@ namespace Qbank.Questions.Events.Tags
         {
             if (state.Has(tagName) == false && state.Has(tagId) == false)
             {
-                yield return new CreatedTag(tagId, tagName);
+                yield return new TagCreated(tagId, tagName);
             }
         }
 

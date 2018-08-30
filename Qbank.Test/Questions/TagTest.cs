@@ -16,7 +16,7 @@ namespace Qbank.Test.Questions
             var tagId = Guid.NewGuid();
             var tagName = "Test";
 
-            Given(new CreatedTag(tagId, tagName));
+            Given(new TagCreated(tagId, tagName));
             When(s => TagActions.Create(s, Guid.NewGuid(), tagName));
             Then();
         }
@@ -29,7 +29,7 @@ namespace Qbank.Test.Questions
 
             Given();
             When(s => TagActions.Create(s, tagId, tagName));
-            Then(new CreatedTag(tagId, tagName));
+            Then(new TagCreated(tagId, tagName));
         }
 
         [Test]
@@ -45,16 +45,16 @@ namespace Qbank.Test.Questions
                 Guid.NewGuid()
             };
 
-            Given(new CreatedTag(ids[0], "test"));
-            Given(new CreatedTag(ids[1], "test1"));
-            Given(new CreatedTag(ids[2], "test2"));
+            Given(new TagCreated(ids[0], "test"));
+            Given(new TagCreated(ids[1], "test1"));
+            Given(new TagCreated(ids[2], "test2"));
 
             When(s => TagActions.Create(s, ids[3], "test"));
             When(s => TagActions.Create(s, ids[4], "test3"));
             When(s => TagActions.Create(s, ids[5], "test4"));
 
-            Then(new CreatedTag(ids[4], "test3"));
-            Then(new CreatedTag(ids[5], "test4"));
+            Then(new TagCreated(ids[4], "test3"));
+            Then(new TagCreated(ids[5], "test4"));
         }
 
         [Test]
@@ -62,7 +62,7 @@ namespace Qbank.Test.Questions
         {
             var tagId = Guid.NewGuid();
 
-            Given(new CreatedTag(tagId, "test"));
+            Given(new TagCreated(tagId, "test"));
             When(s => TagActions.Create(s, tagId, "test1"));
             Then();
         }

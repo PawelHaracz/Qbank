@@ -18,12 +18,10 @@ namespace Qbank.Questions.Events.Questions
 
         public void Apply(AnswerCreated @event)
         {
-            if (Has(@event.QuestionId, @event.AnswerId))
+            if (Has(@event.QuestionId) && Has(@event.QuestionId, @event.AnswerId) == false)
             {
-                return;
-            }
-
-            _answerGuidSet.Add((@event.QuestionId, @event.AnswerId));
+                _answerGuidSet.Add((@event.QuestionId, @event.AnswerId));
+            }            
         }
 
         public bool Has(Guid questionId)

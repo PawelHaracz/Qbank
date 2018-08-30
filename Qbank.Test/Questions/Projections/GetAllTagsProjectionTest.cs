@@ -12,9 +12,9 @@ namespace Qbank.Test.Questions.Projections
         [Test]
         public void Given_three_tags_should_give_all()
         {
-            var event1 = new CreatedTag(Guid.NewGuid(), "Test1");
-            var event2 = new CreatedTag(Guid.NewGuid(), "Test2");
-            var event3 = new CreatedTag(Guid.NewGuid(), "Test3");
+            var event1 = new TagCreated(Guid.NewGuid(), "Test1");
+            var event2 = new TagCreated(Guid.NewGuid(), "Test2");
+            var event3 = new TagCreated(Guid.NewGuid(), "Test3");
 
             Given($"{StreamPrefix.Tag}", event1);
             Given($"{StreamPrefix.Tag}", event2);

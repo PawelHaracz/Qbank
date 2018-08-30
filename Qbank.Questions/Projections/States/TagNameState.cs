@@ -9,7 +9,7 @@ namespace Qbank.Questions.Projections.States
         [DataMember(Order = 1)]
         public string Name { get; set; }
 
-        public void Apply(CreatedTag questionCreated)
+        public void Apply(TagCreated questionCreated)
         {
             Name = questionCreated.TagName;
         }

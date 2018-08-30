@@ -6,16 +6,16 @@ namespace Qbank.Questions.Events.Tags
 {
     [DataContract]
     [EventTypeId(TypeId)]
-    public class CreatedTag : IEvent
+    public class TagCreated : IEvent
     {
         public const string TypeId = "A03C5F84-7BBF-41A9-9105-5B01FBA6D33D";
 
-        public CreatedTag()
+        public TagCreated()
         {
 
         }
 
-        public CreatedTag(Guid tagId, string tagName)
+        public TagCreated(Guid tagId, string tagName)
         {
             TagId = tagId;
             TagName = tagName;
@@ -29,7 +29,7 @@ namespace Qbank.Questions.Events.Tags
 
         public override string ToString()
         {
-            return $"{nameof(CreatedTag)} with {nameof(TagId)} : {TagId}, {nameof(TagName)} : {TagName}";
+            return $"{nameof(TagCreated)} with {nameof(TagId)} : {TagId}, {nameof(TagName)} : {TagName}";
         }
     }
 }
