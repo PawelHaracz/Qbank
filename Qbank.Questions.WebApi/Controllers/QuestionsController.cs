@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Qbank.Core.Command;
 using Qbank.Core.Queries;
 using Qbank.Questions.Commands;
+using Qbank.Questions.Projections.States;
 using Qbank.Questions.Quries;
 using Qbank.Questions.WebApi.Models;
 
@@ -37,9 +38,14 @@ namespace Qbank.Questions.WebApi.Controllers
 
         // GET api/questions/5
         [HttpGet("{id}")]
-        public ActionResult<string> Get(Guid id)
+        public async Task<ActionResult<QuestionWithAnswersState>> Get(Guid id)
         {
-            return "command";
+            var getQuestionWithAnswersQuery = new GetQuestionWithAnswersQuery()
+            {
+                QuestionId = id
+            };
+            var result = await _queryDispatcher.DispatchAsync(getQuestionWithAnswersQuery).ConfigureAwait(false);
+            return result;
         }
 
         // POST api/questions/{tagName}

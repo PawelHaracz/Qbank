@@ -79,8 +79,8 @@ namespace Qbank.Core.Projections
                 if (eventIds.Add(id) == false)
                 {
                     throw new Exception($"The dispatchedEvent {typeof(TEvent)} has been already registered ");
-                }
-
+                }   
+  
                 partionKeyMappers[id] = (d) => getPartitionKey(d.Metadata, (TEvent)d.Event);
                 appliers[id] = (d, s) => apply(d.Metadata, (TEvent)d.Event, s);
             }
