@@ -9,15 +9,11 @@ namespace Qbank.Questions.Projections.States
     public class QuestionsByTagState
     {
         [DataMember(Order = 1)]
-        public IList<Guid> Questions => new List<Guid>();
+        public HashSet<Guid> Questions => new HashSet<Guid>();
 
-        public void Apply(AssosiatedQuestionToTag assosiatedQuestionToTag)
+        public void Apply(TagCreated tagCreated)
         {
-            if (Questions.Contains(assosiatedQuestionToTag.QuestionId))
-            {
-                return;
-            }
-            Questions.Add(assosiatedQuestionToTag.TagId);
+            Questions.Add(tagCreated.QuestionId);
         }
     }
 }

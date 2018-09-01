@@ -6,6 +6,7 @@ namespace Qbank.Questions.Quries
 {
     public class GetQuestionWithAnswersQuery : IQuery<QuestionWithAnswersState>
     {
-        public Guid QuestionId { get; set;}
+        public string User { get; set; }
+        public Guid QuestionId { get; set; }
     }
 }

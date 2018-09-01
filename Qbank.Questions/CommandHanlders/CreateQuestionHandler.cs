@@ -18,24 +18,13 @@ namespace Qbank.Questions.CommandHanlders
 
         public async Task<Guid> HandleAsync(CreateQuestion command)
         {
-            var questionId = Guid.NewGuid();
-            var tagId = Guid.NewGuid();
+            var questionId = Guid.NewGuid();  
 
-            var questionStreamId = $"{StreamPrefix.Question}_{command.CreatedOn}";
-            var questionDetail = $"{StreamPrefix.Question}_{questionId}";
-            var tagStreamId = $"{StreamPrefix.Tag}";
-            var tagToQuesitonStreamId = $"{StreamPrefix.Tag}_{tagId}";
-                     
+            var questionStreamId = $"{StreamPrefix.Question}_{command.CreatedOn}";                             
 
-            var questionTask = _eventStoreConnectionProvider.Execute<QuestionState>(questionStreamId, s => QuestionActions.Create(s, questionId, command.Question));
-            var questionDetailTask = _eventStoreConnectionProvider.Execute<QuestionState>(questionDetail, s => QuestionActions.Create(s, questionId, command.Question)); //isn't work !! the same state (remove glo
-            //move to another commandHandler
-            var tagGlobalTask = _eventStoreConnectionProvider.Execute<TagState>(tagStreamId, s => TagActions.Create(s, tagId, command.Tag));
-            var tagTask = _eventStoreConnectionProvider.Execute<TagState>(tagToQuesitonStreamId, s => TagActions.Create(s, tagId, command.Tag)); //isn't work !! the same state
-            var assosiateQuestionToTagTask = _eventStoreConnectionProvider.Execute<TagState>(tagToQuesitonStreamId, s => TagActions.Assosiate(s, tagId, questionId));
+            await _eventStoreConnectionProvider.Execute<QuestionState>(questionStreamId, s => QuestionActions.Create(s, questionId, command.Question));
+            await _eventStoreConnectionProvider.Execute<QuestionState>(questionStreamId, s => TagActions.Create(s, questionId, command.Tag));
 
-            await Task.WhenAll(questionTask, questionDetailTask, tagGlobalTask, tagTask).ConfigureAwait(false);
-            await assosiateQuestionToTagTask.ConfigureAwait(false);
 
             return questionId;
         }

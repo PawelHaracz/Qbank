@@ -6,6 +6,6 @@
     /// <typeparam name="TResult">The type of the result.</typeparam>
     public interface IQuery<TResult>
     {
-
+        string User { get; set; }
     }
 }

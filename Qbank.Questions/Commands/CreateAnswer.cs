@@ -8,6 +8,6 @@ namespace Qbank.Questions.Commands
         public string Answer { get; set; }
         public bool IsCorrect { get; set; }
         public Guid QuestionId { get; set; }
-        public string CreatedOn { get; set; }
+        public string CreatedBy { get; set; }
     }
 }

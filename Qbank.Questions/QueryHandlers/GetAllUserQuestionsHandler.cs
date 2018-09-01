@@ -29,7 +29,7 @@ namespace Qbank.Questions.QueryHandlers
             {
                 return new Dictionary<Guid, string>();
             }
-            return aggregation.Single().Value.Questions;
+            return aggregation.ToDictionary((k) =>new Guid(k.Key), (v) => v.Value.Questions);
         }
     }
 }

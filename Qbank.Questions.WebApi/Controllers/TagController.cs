@@ -31,12 +31,14 @@ namespace Qbank.Questions.WebApi.Controllers
             return Ok(result);
         }
 
-        [HttpPost("{name}")]
+        [HttpPut("{name}/Question/{questionId}")]
         [ProducesResponseType(200, Type = typeof(Guid))]
-        public async Task<ActionResult<Guid>> Post([FromRoute]string name)
+        public async Task<ActionResult<Guid>> Post([FromRoute]string name, [FromRoute]Guid questionId)
         {
             var command = new CreateTag()
             {
+                QuestionId = questionId,
+                User = "PawelHaracz",
                 TagName = name
             };
             var result = await _commandDispatcher.DispatchAsync(command).ConfigureAwait(false);

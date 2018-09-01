@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Qbank.Core.Projections;
 using Qbank.Questions.Events.Questions;
+using Qbank.Questions.Events.Tags;
 using Qbank.Questions.Projections.States;
 
 namespace Qbank.Questions.Projections
@@ -14,13 +15,9 @@ namespace Qbank.Questions.Projections
         {
           
             //Expected streamId = Question_UserName
-            mapping.For<QuestionCreated>((meta, e) =>meta.StreamId.Split('_')[1], Apply);
-            mapping.For<AnswerCreated>((meta, e) => meta.StreamId.Split('_')[1], Apply);
-        }
-
-        private Task Apply(Metadata meta, AnswerCreated questionCreated, QuestionTeasersWith100CharactersState questionTeasersWith100Characters)
-        {
-            return Task.CompletedTask;
+            mapping.For<QuestionCreated>((meta, e) =>e.QuestionId.ToString(), Apply);
+            mapping.For<AnswerCreated>((created) => string.Empty, (created, state) => Task.CompletedTask);
+            mapping.For<TagCreated>(created => string.Empty, (created, state) => Task.CompletedTask);
         }
 
         //Later change QuestionCreated to IEvent to handle many events :)

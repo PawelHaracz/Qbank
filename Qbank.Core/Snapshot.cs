@@ -6,14 +6,14 @@ namespace Qbank.Core
     public class Snapshot<TState>
     {
         private static ConcurrentDictionary<string, Snapshot<TState>> _snapshotDictionary = new ConcurrentDictionary<string, Snapshot<TState>>();
-        public Snapshot(TState state, int version)
+        public Snapshot(TState state, long version)
         {
             State = state;
             Version = version;
         }
 
         public TState State { get; }
-        public int Version { get; }
+        public long Version { get; }
 
         public static bool TryGetSnapshot(string key, out Snapshot<TState> snapshot) => _snapshotDictionary.TryGetValue(key, out snapshot);
 
@@ -24,14 +24,14 @@ namespace Qbank.Core
     {
         private static ConcurrentDictionary<string, SnapshotProjection<Dictionary<string, TState>>> _snapshotDictionary = new ConcurrentDictionary<string, SnapshotProjection<Dictionary<string, TState>>>();
 
-        public SnapshotProjection(TState state, int version)
+        public SnapshotProjection(TState state, long version)
         {
             State = state;
             Version = version;
         }
 
         public TState State { get; }
-        public int Version { get; }
+        public long Version { get; }
 
         public static bool TryGetSnapshot(string key, out SnapshotProjection<Dictionary<string, TState>> snapshot) => _snapshotDictionary.TryGetValue(key, out snapshot);
 

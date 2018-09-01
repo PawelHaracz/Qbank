@@ -20,10 +20,10 @@ namespace Qbank.Test.Questions.Projections
             var g5 = Guid.NewGuid();
             var g6 = Guid.NewGuid();
 
-            Given($"{StreamPrefix.Tag}_{g5}", new AssosiatedQuestionToTag(g5, g1));
-            Given($"{StreamPrefix.Tag}_{g5}", new AssosiatedQuestionToTag(g5, g2));
-            Given($"{StreamPrefix.Tag}_{g5}", new AssosiatedQuestionToTag(g5, g3));
-            Given($"{StreamPrefix.Tag}_{g6}", new AssosiatedQuestionToTag(g6, g4));
+            Given($"{StreamPrefix.Tag}_{g5}", new QuestionToTagAssosiated(g5, g1));
+            Given($"{StreamPrefix.Tag}_{g5}", new QuestionToTagAssosiated(g5, g2));
+            Given($"{StreamPrefix.Tag}_{g5}", new QuestionToTagAssosiated(g5, g3));
+            Given($"{StreamPrefix.Tag}_{g6}", new QuestionToTagAssosiated(g6, g4));
 
             Then(g5.ToString(), new QuestionsByTagState()
             {

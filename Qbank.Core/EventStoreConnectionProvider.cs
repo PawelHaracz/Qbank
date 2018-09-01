@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.Exceptions;
@@ -15,7 +16,8 @@ using Qbank.Core.Event;
 namespace Qbank.Core
 {
     public class EventStoreConnectionProvider : IEventStoreConnectionProvider, IDisposable
-    {        
+    {
+        private static long _expectedVersion = ExpectedVersion.EmptyStream;
         private readonly EventStoreConfiguration _configuration;    
         private  IEventStoreConnection _connection;
 
@@ -39,7 +41,7 @@ namespace Qbank.Core
         public async Task Execute<TState>(string streamId, Func<TState, IEnumerable<IEvent>> execute) where TState : BaseState, new()
         {
             TState state;
-            int version;
+            long version;
             if (Snapshot<TState>.TryGetSnapshot(streamId, out var snapshot))
             {
                 state = snapshot.State;
@@ -62,7 +64,7 @@ namespace Qbank.Core
         public async Task<Dictionary<string, TState>> Dispatch<TProjection, TState>(string streamId) where TProjection : ProjectionBase<TProjection, TState>, new() where TState : new()
         {
             Dictionary<string, TState> result;
-            int version;
+            long version;
             if (SnapshotProjection<TState>.TryGetSnapshot(streamId, out var snapshot))
             {
                 result = snapshot.State;
@@ -90,7 +92,7 @@ namespace Qbank.Core
             _connection = null;
         }
 
-        private async Task<int> Dispatch<TProjection, TState>(string streamId, int version, Dictionary<string, TState> result) where TProjection : ProjectionBase<TProjection, TState>, new() where TState : new()
+        private async Task<long> Dispatch<TProjection, TState>(string streamId, long version, Dictionary<string, TState> result) where TProjection : ProjectionBase<TProjection, TState>, new() where TState : new()
         {
             StreamEventsSlice eventsSlice;
             var p = new TProjection();
@@ -120,12 +122,16 @@ namespace Qbank.Core
                     };
 
                     var partition = p.GetPartitioningKey(dispatchedEvent);
-                    if (result.TryGetValue(partition,out var  state) == false)
+                    if (string.IsNullOrWhiteSpace(partition) == false)
                     {
-                        result[partition] = state = new TState();
+                        if (result.TryGetValue(partition, out var state) == false)
+                        {
+                            result[partition] = state = new TState();
+                        }
+
+                        await p.Dispatch(dispatchedEvent, state).ConfigureAwait(false);
                     }
 
-                    await p.Dispatch(dispatchedEvent, state).ConfigureAwait(false);
                     version++;
                 }
                 
@@ -135,7 +141,7 @@ namespace Qbank.Core
             return version;
         }
 
-        private async Task<int> Execute<TState>(string streamId, int version, TState state,
+        private async Task<long> Execute<TState>(string streamId, long version, TState state,
             Func<TState, IEnumerable<IEvent>> execute)
             where TState : BaseState, new()
         {
@@ -145,12 +151,11 @@ namespace Qbank.Core
             {
                 
                 eventsSlice = await _connection.ReadStreamEventsForwardAsync(streamId, version, _configuration.SnapchotLimit, false).ConfigureAwait(false);
-
                 foreach (var e in eventsSlice.Events)
                 {
                     var @event = EventSerializer.Deserialize(e.Event.Data, new Guid(e.Event.EventType));
                     StateApplier.Apply(state, @event);
-                    version++;
+                    version++;                   
                 }
             } while (!eventsSlice.IsEndOfStream);
 
@@ -164,7 +169,9 @@ namespace Qbank.Core
                 return new EventData(eventId, eventTypeId, false, data, new byte[0]);
             }).ToArray();
 
-            await _connection.AppendToStreamAsync(streamId, ExpectedVersion.Any, newEventsData).ConfigureAwait(false);
+            
+            var status = await _connection.AppendToStreamAsync(streamId, ExpectedVersion.Any /*Interlocked.Read(ref _expectedVersion)*/, newEventsData).ConfigureAwait(false);
+            Interlocked.Add(ref _expectedVersion, status.NextExpectedVersion);
 
             return version;
         }

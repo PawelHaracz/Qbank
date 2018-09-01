@@ -7,21 +7,15 @@ namespace Qbank.Questions.Events.Tags
     public class TagState : BaseState
     {
         private readonly HashSet<string> _tagNameSet = new HashSet<string>();
-        private readonly HashSet<Guid> _tagIdsSet = new HashSet<Guid>();
-        private readonly HashSet<(Guid TagId, Guid QuestionId)> _tagQuestionSet =new HashSet<(Guid TagId, Guid QuestionId)>(); 
+        private readonly HashSet<Guid> _questionIdsSet = new HashSet<Guid>();
 
         public void Apply(TagCreated @event)
         {
-            if (Has(@event.TagName) == false && Has(@event.TagId) == false)
+            if (Has(@event.TagName) == false && Has(@event.QuestionId) == false)
             {
-                _tagIdsSet.Add(@event.TagId);
+                _questionIdsSet.Add(@event.QuestionId);
                 _tagNameSet.Add(@event.TagName);
             }
-        }
-
-        public void Apply(AssosiatedQuestionToTag @event)
-        {
-
         }
 
         public bool Has(string tagName)
@@ -29,14 +23,10 @@ namespace Qbank.Questions.Events.Tags
             return _tagNameSet.Contains(tagName);
         }
 
-        public bool Has(Guid tagId, Guid questionId)
-        {
-            return _tagQuestionSet.Contains((tagId, questionId));
-        }
 
-        public bool Has(Guid tagId)
+        public bool Has(Guid questionId)
         {
-            return _tagIdsSet.Contains(tagId);
+            return _questionIdsSet.Contains(questionId);
         }
 
     }

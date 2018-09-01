@@ -9,7 +9,7 @@ namespace Qbank.Questions.Projections.States
     public class QuestionTeasersWith100CharactersState
     {  
         [DataMember(Order = 1)]
-        public Dictionary<Guid, string> Questions { get; set; } = new Dictionary<Guid, string>();  
+        public string Questions { get; set; }   
 
         
         public void Apply(QuestionCreated questionCreated)
@@ -19,7 +19,7 @@ namespace Qbank.Questions.Projections.States
             {
                 question = question.Substring(0, 100);
             }
-            Questions.Add(questionCreated.QuestionId, question);
+            Questions = question;
         }
     }
 }

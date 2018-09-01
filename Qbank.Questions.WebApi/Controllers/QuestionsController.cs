@@ -42,7 +42,8 @@ namespace Qbank.Questions.WebApi.Controllers
         {
             var getQuestionWithAnswersQuery = new GetQuestionWithAnswersQuery()
             {
-                QuestionId = id
+                QuestionId = id,
+                User = "PawelHaracz"
             };
             var result = await _queryDispatcher.DispatchAsync(getQuestionWithAnswersQuery).ConfigureAwait(false);
             return result;
@@ -93,7 +94,7 @@ namespace Qbank.Questions.WebApi.Controllers
                     QuestionId = questionId,
                     Answer = a.Answer,
                     IsCorrect = a.IsCorrect,
-                    CreatedOn = command.CreatedOn
+                    CreatedBy = command.CreatedOn
                 });
                 var answerTasks = aneswerCommands.Select(answer => _commandDispatcher.DispatchAsync(answer)).Cast<Task>().ToList();
 

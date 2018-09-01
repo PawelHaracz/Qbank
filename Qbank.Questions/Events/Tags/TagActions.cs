@@ -1,24 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using Qbank.Core.Event;
+using Qbank.Questions.Events.Questions;
 
 namespace Qbank.Questions.Events.Tags
 {
     public class TagActions
     {
-        public static IEnumerable<IEvent> Create(TagState state, Guid tagId, string tagName)
+        public static IEnumerable<IEvent> Create(QuestionState state, Guid questionId, string tagName)
         {
-            if (state.Has(tagName) == false && state.Has(tagId) == false)
+            if (state.Has(tagName, questionId) == false)
             {
-                yield return new TagCreated(tagId, tagName);
-            }
-        }
-
-        public static IEnumerable<IEvent> Assosiate(TagState state, Guid tagId, Guid questionId)
-        {
-            if (state.Has(tagId, questionId) == false)
-            {
-                yield return new AssosiatedQuestionToTag(tagId, questionId);
+                yield return new TagCreated(questionId, tagName);
             }
         }
     }

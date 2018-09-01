@@ -8,9 +8,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Qbank.Test", "Qbank.Test\Qb
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Qbank.Questions", "Qbank.Questions\Qbank.Questions.csproj", "{D13F1578-11D8-4EB1-93B8-06962D1A601B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qbank.Questions.WebApi", "Qbank.Questions.WebApi\Qbank.Questions.WebApi.csproj", "{405D641C-4F12-4B4D-8AFA-61714892D537}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Qbank.Questions.WebApi", "Qbank.Questions.WebApi\Qbank.Questions.WebApi.csproj", "{405D641C-4F12-4B4D-8AFA-61714892D537}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{E7531BE1-7274-45DC-8211-07DA9E866E32}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{1681F6D0-7150-450B-8AD4-6240BDC5CC31}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

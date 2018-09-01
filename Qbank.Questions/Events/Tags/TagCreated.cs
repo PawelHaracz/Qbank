@@ -15,21 +15,22 @@ namespace Qbank.Questions.Events.Tags
 
         }
 
-        public TagCreated(Guid tagId, string tagName)
+        public TagCreated(Guid questionId, string tagName)
         {
-            TagId = tagId;
             TagName = tagName;
+            QuestionId = questionId;
         }
 
         [DataMember(Order = 1)]
-        public Guid TagId { get; set; }
+        public Guid QuestionId { get; set; }
 
         [DataMember(Order = 2)]
         public string TagName { get; set; }
+        
 
         public override string ToString()
         {
-            return $"{nameof(TagCreated)} with {nameof(TagId)} : {TagId}, {nameof(TagName)} : {TagName}";
+            return $"{nameof(TagCreated)} with {nameof(TagName)} : {TagName}, {nameof(QuestionId)} : {QuestionId}";
         }
     }
 }

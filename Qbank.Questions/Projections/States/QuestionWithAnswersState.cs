@@ -1,17 +1,25 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using Qbank.Questions.Events.Questions;
+using Qbank.Questions.Events.Tags;
 
 namespace Qbank.Questions.Projections.States
 {
     [DataContract]
     public class QuestionWithAnswersState
     {
+        [DataMember(Order = 1)]
         public string Question { get; set; }
-        public IList<Answer> Answers { get; set; } = new List<Answer>();
+
+        [DataMember(Order = 2)]
+        public HashSet<Answer> Answers { get; set; } = new HashSet<Answer>();
+
+        [DataMember(Order = 3)]
+        public HashSet<string> Tags = new HashSet<string>();
 
         public void Apply(QuestionCreated questionCreated)
         {
@@ -26,6 +34,10 @@ namespace Qbank.Questions.Projections.States
                 Id = answerCreated.AnswerId,
                 IsCorrect = answerCreated.IsCorrect
             });
+        }    
+        public void Apply(TagCreated tagCreated)
+        {
+            Tags.Add(tagCreated.TagName);
         }
     }
 

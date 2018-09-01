@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Qbank.Questions\Qbank.Questions.csproj" />
+    <ProjectReference Include="..\Qbank.Core\Qbank.Core.csproj" />
   </ItemGroup>
 
 </Project>

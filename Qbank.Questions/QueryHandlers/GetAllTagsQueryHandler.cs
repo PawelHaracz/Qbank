@@ -21,7 +21,7 @@ namespace Qbank.Questions.QueryHandlers
 
         public async Task<IDictionary<Guid, string>> HandleAsync(GetAllTagsQuery query)
         {
-            var streamId = $"{StreamPrefix.Tag}";
+            var streamId = $"{StreamPrefix.Question}_{query.User}";
             var aggregation = await _connectionProvider.Dispatch<GetAllTagsProjection, TagNameState>(streamId).ConfigureAwait(false);
             if (!aggregation.Any())
             {

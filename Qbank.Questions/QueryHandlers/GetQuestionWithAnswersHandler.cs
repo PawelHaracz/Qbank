@@ -21,14 +21,14 @@ namespace Qbank.Questions.QueryHandlers
 
         public async Task<QuestionWithAnswersState> HandleAsync(GetQuestionWithAnswersQuery query)
         {
-            var streamId = $"{StreamPrefix.Question}_{query.QuestionId}";
+            var streamId = $"{StreamPrefix.Question}_{query.User}";
             var aggregation = await _connectionProvider.Dispatch<QuestionWithAnswerProjection, QuestionWithAnswersState>(streamId).ConfigureAwait(false);
             if (!aggregation.Any())
             {
                 return new QuestionWithAnswersState();
             }
 
-            return aggregation.Single().Value;
+            return aggregation.Single(e => e.Key == query.QuestionId.ToString()).Value;
         }
     }
 }

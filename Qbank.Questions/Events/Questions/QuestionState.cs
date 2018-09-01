@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Qbank.Core.Event;
+using Qbank.Questions.Events.Tags;
 
 namespace Qbank.Questions.Events.Questions
 {
@@ -8,6 +9,7 @@ namespace Qbank.Questions.Events.Questions
     {
         private readonly HashSet<Guid> _questionGuidSet = new HashSet<Guid>();
         private readonly HashSet<(Guid QustionId, Guid AnswerId)> _answerGuidSet = new HashSet<(Guid QustionId, Guid AnswerId)>();
+        private readonly HashSet<(string TagName, Guid QuestionId)> _tagNamesSet = new HashSet<(string TagName, Guid QuestionId)>();
         public void Apply(QuestionCreated @event)
         {
             if (Has(@event.QuestionId) == false)
@@ -24,6 +26,14 @@ namespace Qbank.Questions.Events.Questions
             }            
         }
 
+        public void Apply(TagCreated @event)
+        {
+            if (Has(@event.TagName, @event.QuestionId) == false)
+            {
+                _tagNamesSet.Add((@event.TagName, @event.QuestionId));
+            }
+        }
+
         public bool Has(Guid questionId)
         {
             return _questionGuidSet.Contains(questionId);
@@ -32,6 +42,11 @@ namespace Qbank.Questions.Events.Questions
         public bool Has(Guid questionId, Guid answerId)
         {
             return _answerGuidSet.Contains((questionId, answerId));
+        }
+
+        public bool Has(string tagName, Guid questionId)
+        {
+            return _tagNamesSet.Contains((tagName, questionId));
         }
     }
 }

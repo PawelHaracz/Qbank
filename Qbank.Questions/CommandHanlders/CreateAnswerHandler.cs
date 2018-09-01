@@ -19,7 +19,7 @@ namespace Qbank.Questions.CommandHanlders
         public async Task<Guid> HandleAsync(CreateAnswer command)
         {
             var id = Guid.NewGuid();
-            var questionStreamId = $"{StreamPrefix.Question}_{command.QuestionId}";
+            var questionStreamId = $"{StreamPrefix.Question}_{command.CreatedBy}";
             await _eventStoreConnectionProvider.Execute<QuestionState>(questionStreamId, s => QuestionActions.Create(s, command.QuestionId, id, command.Answer, command.IsCorrect));
 
             return id;
