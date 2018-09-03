@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   qbank.questions.webapi:
-    image: ${DOCKER_REGISTRY}qbankquestionswebapi
+    image: ${DOCKER_REGISTRY}qbank-questions-webapi
     build:
       context: .
       dockerfile: Qbank.Questions.WebApi/Dockerfile

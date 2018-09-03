@@ -3,9 +3,9 @@
   <PropertyGroup Label="Globals">
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
-    <ProjectGuid>e7531be1-7274-45dc-8211-07da9e866e32</ProjectGuid>
+    <ProjectGuid>9c042993-a48b-49dd-a193-a8ab79722eb2</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
-    <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/api/values</DockerServiceUrl>
+    <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
     <DockerServiceName>qbank.questions.webapi</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>

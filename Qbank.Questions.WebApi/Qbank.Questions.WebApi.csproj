@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -18,9 +18,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="3.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Qbank.Questions\Qbank.Questions.csproj" />
+  <ItemGroup>  
     <ProjectReference Include="..\Qbank.Core\Qbank.Core.csproj" />
+    <ProjectReference Include="..\Qbank.Questions\Qbank.Questions.csproj" />
   </ItemGroup>
 
 </Project>

@@ -61,10 +61,10 @@ namespace Qbank.Questions.WebApi
             }
             else
             {
-                app.UseHsts();
+                //app.UseHsts();  todo 
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseMvc();
             app.UseSwagger();
 
