@@ -42,6 +42,13 @@ namespace Qbank.Questions.WebApi
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.Configure<EventStoreConfiguration>(options => Configuration.GetSection("EventStoreSection").Bind(options));
+            services.AddCors(o => o.AddPolicy("DebugMode", b=>
+            {
+                b.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            }));
+
 
             var builder = new ContainerBuilder();
             builder.Populate(services);
@@ -58,13 +65,15 @@ namespace Qbank.Questions.WebApi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseCors("DebugMode");
             }
             else
             {
-                //app.UseHsts();  todo 
+                app.UseHsts();
+                app.UseHttpsRedirection();
             }
 
-            //app.UseHttpsRedirection();
+           
             app.UseMvc();
             app.UseSwagger();
 
