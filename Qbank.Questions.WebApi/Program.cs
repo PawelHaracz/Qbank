@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
 namespace Qbank.Questions.WebApi
 {
@@ -19,6 +12,10 @@ namespace Qbank.Questions.WebApi
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+               //.UseKestrel(options => options.ConfigureEndpoints())
+               .UseStartup<Startup>();
+
     }
+
+    //hardcoded secrets in appsettings because docker doesn't work
 }

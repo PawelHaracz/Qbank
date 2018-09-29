@@ -5,7 +5,7 @@ EXPOSE 44313
 
 ENV ASPNETCORE_ENVIRONMENT=Docker
 ENV ASPNETCORE_URLS=https://+:443;http://+:80
-#ENV ASPNETCORE_HTTPS_PORT=44313
+ENV ASPNETCORE_HTTPS_PORT=44313
 
 FROM microsoft/dotnet:2.1-sdk AS build
 WORKDIR /Qbank
@@ -26,4 +26,9 @@ RUN dotnet publish Qbank.Questions.WebApi.csproj -c Release -o /app
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
+
+#ARG CERT_PATH_DEST=/app/cert/localhost-dev.pfx
+#ENV CertPath=$CERT_PATH_DEST
+#COPY Scripts/localhost-dev.pfx $CertPath	
+
 ENTRYPOINT ["dotnet", "Qbank.Questions.WebApi.dll"]

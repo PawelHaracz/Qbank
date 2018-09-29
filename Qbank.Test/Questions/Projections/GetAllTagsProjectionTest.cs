@@ -16,13 +16,13 @@ namespace Qbank.Test.Questions.Projections
             var event2 = new TagCreated(Guid.NewGuid(), "Test2");
             var event3 = new TagCreated(Guid.NewGuid(), "Test3");
 
-            Given($"{StreamPrefix.Tag}", event1);
-            Given($"{StreamPrefix.Tag}", event2);
-            Given($"{StreamPrefix.Tag}", event3);
+            Given($"{StreamPrefix.Question}", event1);
+            Given($"{StreamPrefix.Question}", event2);
+            Given($"{StreamPrefix.Question}", event3);
 
-            Then(event1.TagId.ToString(), new TagNameState { Name = event1.TagName });
-            Then(event2.TagId.ToString(), new TagNameState { Name = event2.TagName });
-            Then(event3.TagId.ToString(), new TagNameState { Name = event3.TagName });
+            Then(event1.QuestionId.ToString(), new TagNameState { Name = event1.TagName });
+            Then(event2.QuestionId.ToString(), new TagNameState { Name = event2.TagName });
+            Then(event3.QuestionId.ToString(), new TagNameState { Name = event3.TagName });
         }
     }
 }

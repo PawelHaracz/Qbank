@@ -4,7 +4,9 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Qbank.Core;
@@ -24,7 +26,12 @@ namespace Qbank.Questions.WebApi
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
-            builder.AddEnvironmentVariables();
+            if (env.IsDevelopment())
+            {
+                builder.AddUserSecrets<Startup>();
+            }
+
+            builder.AddEnvironmentVariables();                          
             Configuration = builder.Build();
         }
 
@@ -65,15 +72,14 @@ namespace Qbank.Questions.WebApi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseCors("DebugMode");
+               
             }
             else
             {
                 app.UseHsts();
                 app.UseHttpsRedirection();
             }
-
-           
+            app.UseCors("DebugMode");
             app.UseMvc();
             app.UseSwagger();
 
@@ -84,8 +90,19 @@ namespace Qbank.Questions.WebApi
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
 
+            int? httpsPort = null;
+            var httpsSection = Configuration.GetSection("HttpServer:Endpoints:Https");
+            if (httpsSection.Exists())
+            {
+                var httpsEndpoint = new EndpointConfiguration();
+                httpsSection.Bind(httpsEndpoint);
+                httpsPort = httpsEndpoint.Port;
+            }
+            var statusCode = env.IsDevelopment() ? StatusCodes.Status302Found : StatusCodes.Status301MovedPermanently;
+            app.UseRewriter(new RewriteOptions().AddRedirectToHttps(statusCode, httpsPort));
+
             applicationLifetime.ApplicationStopped
                 .Register(() => Container.Dispose());
-        }
+        }      
     }
 }

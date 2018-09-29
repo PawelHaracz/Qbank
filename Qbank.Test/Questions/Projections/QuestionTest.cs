@@ -1,7 +1,5 @@
 ﻿using System;
 using NUnit.Framework;
-using Qbank.Questions;
-using Qbank.Questions.Events;
 using Qbank.Questions.Events.Questions;
 using Qbank.Questions.Projections;
 using Qbank.Questions.Projections.States;
@@ -23,21 +21,21 @@ namespace Qbank.Test.Questions.Projections
             Given($"Question_PawelHaracz", new QuestionCreated(g3, "but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages"));
             Given($"Question_JanKowalski", new QuestionCreated(g4, "and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."));
 
-            Then("PawelHaracz", new QuestionTeasersWith100CharactersState()
+            Then($"{g1}", new QuestionTeasersWith100CharactersState
             {
-                Questions =
-               {
-                   { g1, "Lorem Ipsum is simply dummy text of the printing and typesetting industry".Substring(0,20) },
-                   { g2, "when an unknown printer took a galley of type and scrambled it to make a type".Substring(0,20)},
-                   { g3,  "but also the leap into electronic typesetting, remaining essentially unchanged.".Substring(0,20)}
-               }
+                Questions = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1".Substring(0, 100)   
+            });           
+            Then($"{g2}", new QuestionTeasersWith100CharactersState
+            {
+                Questions = "when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries".Substring(0, 100)
             });
-            Then("JanKowalski", new QuestionTeasersWith100CharactersState()
+            Then($"{g3}", new QuestionTeasersWith100CharactersState
             {
-                Questions =
-                {
-                    { g4,  "and more recently with desktop publishing software like Aldus Page".Substring(0,20) }
-                }
+                Questions = "but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with".Substring(0, 100)
+            });
+            Then($"{g4}", new QuestionTeasersWith100CharactersState
+            {
+                Questions = "and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.".Substring(0, 100)                
             });
         }
     }

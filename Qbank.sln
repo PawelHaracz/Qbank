@@ -10,7 +10,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Qbank.Questions", "Qbank.Qu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Qbank.Questions.WebApi", "Qbank.Questions.WebApi\Qbank.Questions.WebApi.csproj", "{405D641C-4F12-4B4D-8AFA-61714892D537}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{1681F6D0-7150-450B-8AD4-6240BDC5CC31}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{1681F6D0-7150-450B-8AD4-6240BDC5CC31}"
+	ProjectSection(SolutionItems) = preProject
+		Scripts\Dockerfile = Scripts\Dockerfile
+		Scripts\generate-dev-cert.ps1 = Scripts\generate-dev-cert.ps1
+		Qbank.Questions.WebApi\Cert\localhost-dev.pfx = Qbank.Questions.WebApi\Cert\localhost-dev.pfx
+		scripts.txt = scripts.txt
+	EndProjectSection
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{9C042993-A48B-49DD-A193-A8AB79722EB2}"
 EndProject

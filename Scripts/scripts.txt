@@ -1,0 +1,1 @@
+https://cmatskas.com/enforcing-https-only-traffic-with-asp-net-core-and-kestrel/

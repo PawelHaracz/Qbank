@@ -8,7 +8,7 @@ using Qbank.Questions.Events.Tags;
 namespace Qbank.Test.Questions
 {
     [TestFixture]
-    public class TagTest : BaseAggregateTest<TagState>
+    public class TagTest : BaseAggregateTest<QuestionState>
     {
         [Test]
         public void when_tag_exists_should_do_nothing()

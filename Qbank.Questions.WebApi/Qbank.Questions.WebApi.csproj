@@ -4,9 +4,18 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
     <UserSecretsId>07ab0f5b-945b-4717-943e-48b526cf6f61</UserSecretsId>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="NewFolder\**" />
+    <Content Remove="NewFolder\**" />
+    <EmbeddedResource Remove="NewFolder\**" />
+    <None Remove="NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Cert\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
@@ -16,11 +25,11 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="3.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="2.1.1" />
   </ItemGroup>
 
   <ItemGroup>  
     <ProjectReference Include="..\Qbank.Core\Qbank.Core.csproj" />
     <ProjectReference Include="..\Qbank.Questions\Qbank.Questions.csproj" />
-  </ItemGroup>
-
+  </ItemGroup>  
 </Project>

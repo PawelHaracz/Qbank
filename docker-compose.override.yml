@@ -6,6 +6,11 @@ services:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=https://+:443;http://+:80
       - ASPNETCORE_HTTPS_PORT=44313
+       -USER_SECRETS_ID=07ab0f5b-945b-4717-943e-48b526cf6f61
+      - CertPath=/app/Scripts/localhost-dev.pfx       
     ports:
       - "62779:80"
       - "44313:443"
+    volumes:
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      - ${APPDATA}/Microsoft/UserSecrets/${USER_SECRETS_ID}:/root/.microsoft/usersecrets/${USER_SECRETS_ID}:ro
